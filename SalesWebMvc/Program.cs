@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SalesWebMvc.Data;
 using SalesWebMvc.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddDbContext<SalesWebMvcContext>(options => options.UseMySql(bu
     MySqlServerVersion.LatestSupportedServerVersion, 
     builder => builder.MigrationsAssembly("SalesWebMvc")));
 
+builder.Services.AddScoped<SeedingService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +23,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>().Seed();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
