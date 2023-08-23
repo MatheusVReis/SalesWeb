@@ -14,5 +14,11 @@ namespace SalesWebMvc.Services
             return _context.Seller.ToList();
             //Acessar o db atraves da variavel _context chamando a classe Seller e convertendo para lista com o .ToList();
         }
+        public void Insert(Seller obj)
+        {
+         
+            _context.Add(obj);
+            _context.SaveChanges();
+        }
     }
 }
