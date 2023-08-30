@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using SalesWebMvc.Data;
 using SalesWebMvc.Services;
 using System.Configuration;
+using System.Globalization;
 
 namespace SalesWebMvc
 {
@@ -26,6 +28,14 @@ namespace SalesWebMvc
             builder.Services.AddScoped<DepartmentService>();
 
             var app = builder.Build();
+            var enUs = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUs),
+                SupportedCultures = new List<CultureInfo> { enUs },
+                SupportedUICultures = new List<CultureInfo> { enUs }
+            };
+
             
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -37,6 +47,8 @@ namespace SalesWebMvc
 
             //Service para popular o banco com dados de teste.
             //app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>().Seed();
+
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseHttpsRedirection();
             
